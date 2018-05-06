@@ -1,6 +1,6 @@
 /.gradle/
-/.gradle/
 /bin/
+/build/
 /.classpath
 /.project
 /lib/generierte Interfaces/
