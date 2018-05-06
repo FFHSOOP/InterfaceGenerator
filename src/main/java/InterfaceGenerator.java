@@ -2,6 +2,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +21,7 @@ public class InterfaceGenerator {
     private String klassenName;
     private Class<?> klasse;
     private Method[] methoden;
+    private static final String PFAD = "lib\\generierte Interfaces\\";
 
     public InterfaceGenerator(String klassenName) {
 
@@ -55,34 +58,24 @@ public class InterfaceGenerator {
 
     public static void generiereInterfaceFile(Class<?> klasse, Method[] methoden) {
 	String klassenName = trimmeKlassenName(klasse);
-
-	try (FileWriter writer = new FileWriter(klassenName + ".java")) {
-	    writer.write(InterfaceGenerator.class.getPackageName());
-	    writer.write("public interface" + klassenName + "{");
-	    for (int i = 0; i < methoden.length; i++) {
-		Method methode = methoden[i];
-		writer.write(Modifier.toString(methode.getModifiers()) + " " + methode.getReturnType() + " "
-			+ methode.getName() + erstelleParameterString(methode.getParameterTypes()));
+	if(!Files.exists(Paths.get(PFAD + klassenName + ".java"))) {
+	    try (FileWriter writer = new FileWriter(PFAD + klassenName + ".java")) {
+		writer.write(InterfaceGenerator.class.getPackageName() + "\n");
+		writer.write("public interface" + klassenName + "{" + "\n");
+        	for (int i = 0; i < methoden.length; i++) {
+        	    Method methode = methoden[i];
+        	    writer.write(Modifier.toString(methode.getModifiers()) + " " + methode.getReturnType() + " "
+        		    + methode.getName() + erstelleParameterString(methode.getParameterTypes())  + "\n");
+        	}
+        	writer.write("}");
+        	System.out.println("Das Interface mit dem Namen" + klassenName + "wurde erzeugt und befindet sich im "
+        		+ "Ordner lib\\generierte Interfaces\\ ");
+	    } catch (IOException e) {
+		e.printStackTrace(); 
 	    }
-	    writer.write("}");
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
+	}else { System.out.println("Das File war bereits vorhanden");}
     }
 
-//    public static Object generiereInterface(Class<?> klasse, Method[] methoden) {
-//	String klassenName = trimmeKlassenName(klasse);
-//	
-//	
-//    }
-//
-//    public interface. trimmeKlassenName(Class<?> klasse) {
-//	InterfaceGenerator.class.getPackageName();
-//	}
-    
-    
     public static String trimmeKlassenName(Class<?> klasse) {
 	String klassenName = klasse.getName();
 	int cutPosition = klassenName.lastIndexOf(".");
