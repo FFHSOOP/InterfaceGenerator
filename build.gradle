@@ -18,7 +18,7 @@
 run{
 		
   classpath = sourceSets.main.runtimeClasspath
-  main = 'default.InterfaceGenerator'
+  main = 'InterfaceGenerator'
 
   // arguments to pass to the application
   args = ["student.TestableRandom"]
@@ -59,6 +59,6 @@ sourceSets {
 jar {
 
     //Insert additional libraries for .jar here
-    manifest.attributes 'Main-Class':'default.InterfaceGenerator'
+    manifest.attributes 'Main-Class':'InterfaceGenerator'
 }
 
